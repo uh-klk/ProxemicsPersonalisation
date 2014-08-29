@@ -156,7 +156,7 @@ void MainWindow::fillUserId_ComboBox()
     QString seqQuery;
     QSqlQuery query;
 
-    seqQuery = "SELECT userId, firstName FROM Accompany.Users;";
+    seqQuery = "SELECT userId, firstName FROM Users;";
 
     query = seqQuery;
     ui->userIdComboBox->clear();
@@ -175,7 +175,7 @@ void MainWindow::fillRobotGenericTaskId_ComboBox()
     QString seqQuery;
     QSqlQuery query;
 
-    seqQuery = "SELECT robotGenericTaskId, name FROM Accompany.RobotGenericTask";
+    seqQuery = "SELECT robotGenericTaskId, name FROM RobotGenericTask";
 
     query = seqQuery;
     ui->robotGenericTaskComboBox->clear();
@@ -193,7 +193,7 @@ void MainWindow::on_retrieveRobotGenericTaskBasedPreferencePushButton_clicked()
 
     int preference;
 
-    seqQuery = "SELECT proxemicsId FROM Accompany.UserProxemicsPreferences where userId = ";
+    seqQuery = "SELECT proxemicsId FROM UserProxemicsPreferences where userId = ";
     seqQuery += ui->userIdComboBox->currentText().section('.',0,0);
     seqQuery += " and robotGenericTaskId = ";
     seqQuery += ui->robotGenericTaskComboBox->currentText().section('.',0,0);
@@ -385,7 +385,7 @@ void MainWindow::on_saveRobotGenericTaskBasedPreferencePushButton_clicked()
     if (preference > 0)
     {
 
-        seqQuery = "SELECT * FROM Accompany.UserProxemicsPreferences where userId = ";
+        seqQuery = "SELECT * FROM UserProxemicsPreferences where userId = ";
         seqQuery+= ui->userIdComboBox->currentText().section('.',0,0);
         seqQuery+= " and robotGenericTaskId = ";
         seqQuery+= ui->robotGenericTaskComboBox->currentText().section('.',0,0);
@@ -397,7 +397,7 @@ void MainWindow::on_saveRobotGenericTaskBasedPreferencePushButton_clicked()
 
         if (query.size() > 0) // update the database with new data
         {
-            query.prepare("UPDATE Accompany.UserProxemicsPreferences SET proxemicsId = :proxemicsId"
+            query.prepare("UPDATE UserProxemicsPreferences SET proxemicsId = :proxemicsId"
                           " WHERE userId = :userId and robotGenericTaskId = :robotGenericTaskId" );
             query.bindValue(":proxemicsId",preference );
             query.bindValue(":userId",ui->userIdComboBox->currentText().section('.',0,0));
@@ -408,7 +408,7 @@ void MainWindow::on_saveRobotGenericTaskBasedPreferencePushButton_clicked()
         else if (query.size() == 0) // no data entry, insert a new entry
             {
 
-            query.prepare("INSERT INTO Accompany.UserProxemicsPreferences (userId, robotGenericTaskId, proxemicsId)"
+            query.prepare("INSERT INTO UserProxemicsPreferences (userId, robotGenericTaskId, proxemicsId)"
                           " VALUES (:userId, :robotGenericTaskId, :proxemicsId)");
 
             query.bindValue(":userId", ui->userIdComboBox->currentText().section('.',0,0));
@@ -450,7 +450,7 @@ void MainWindow::fill_PhysicalInteraction_ApproachDistanceComboBox()
     QString seqQuery;
     QSqlQuery query;
 
-    seqQuery = "SELECT robotApproachDistanceId, name FROM Accompany.RobotApproachDistance";
+    seqQuery = "SELECT robotApproachDistanceId, name FROM RobotApproachDistance";
 
     query = seqQuery;
     ui->physicalInteraction_ApproachDistanceComboBox->clear();
@@ -468,7 +468,7 @@ void MainWindow::on_physicalInteraction_RetrieveProxemicPreferencePushButton_cli
 
     int preference;
 
-    seqQuery = "SELECT proxemicsId FROM Accompany.UserProxemicsPreferences where userId = ";
+    seqQuery = "SELECT proxemicsId FROM UserProxemicsPreferences where userId = ";
     seqQuery += ui->userIdComboBox->currentText().section('.',0,0);
     seqQuery += " and robotGenericTaskId = ";
     seqQuery += "7";    //Physical Interaction
@@ -633,7 +633,7 @@ void MainWindow::fill_VerbalInteraction_ApproachDistanceComboBox()
     QString seqQuery;
     QSqlQuery query;
 
-    seqQuery = "SELECT robotApproachDistanceId, name FROM Accompany.RobotApproachDistance";
+    seqQuery = "SELECT robotApproachDistanceId, name FROM RobotApproachDistance";
 
     query = seqQuery;
     ui->verbalInteraction_ApproachDistanceComboBox->clear();
@@ -651,7 +651,7 @@ void MainWindow::on_verbalInteraction_RetrieveProxemicPreferencePushButton_click
 
     int preference;
 
-    seqQuery = "SELECT proxemicsId FROM Accompany.UserProxemicsPreferences where userId = ";
+    seqQuery = "SELECT proxemicsId FROM UserProxemicsPreferences where userId = ";
     seqQuery += ui->userIdComboBox->currentText().section('.',0,0);
     seqQuery += " and robotGenericTaskId = ";
     seqQuery += "8";    //Verbal Interaction
@@ -824,7 +824,7 @@ int MainWindow::saveUserProxemicsPreferenceToDatabase(int approachDirection, int
     current_RobotGenericTaskId = robotGenericTaskId;
 
     //obtain proxemicsId from the user's current selection
-    query.prepare("SELECT proxemicsId FROM Accompany.Proxemics where robotApproachDistanceId = :current_ApprochDistance"
+    query.prepare("SELECT proxemicsId FROM Proxemics where robotApproachDistanceId = :current_ApprochDistance"
                   " and robotApproachOrientationId = :current_ApproachDirection" );
     query.bindValue(":current_ApproachDistance",QString::number(current_ApproachDistance));
     query.bindValue(":current_ApproachDirection",QString::number(current_ApproachDirection));
@@ -855,7 +855,7 @@ int MainWindow::saveUserProxemicsPreferenceToDatabase(int approachDirection, int
     if (preference > 0)
     {
 
-        seqQuery = "SELECT * FROM Accompany.UserProxemicsPreferences where userId = ";
+        seqQuery = "SELECT * FROM UserProxemicsPreferences where userId = ";
         seqQuery+= ui->userIdComboBox->currentText().section('.',0,0);
         seqQuery+= " and robotGenericTaskId = ";
         seqQuery+= QString::number(current_RobotGenericTaskId);
@@ -868,7 +868,7 @@ int MainWindow::saveUserProxemicsPreferenceToDatabase(int approachDirection, int
         if (query.size() > 0) // if previous entry of preference exist, update the database with new data
         {
 
-            query.prepare("UPDATE Accompany.UserProxemicsPreferences SET proxemicsId = :proxemicsId"
+            query.prepare("UPDATE UserProxemicsPreferences SET proxemicsId = :proxemicsId"
                           " WHERE userId = :userId and robotGenericTaskId = :robotGenericTaskId" );
             query.bindValue(":proxemicsId",QString::number(preference) );
             query.bindValue(":userId",ui->userIdComboBox->currentText().section('.',0,0));
@@ -879,7 +879,7 @@ int MainWindow::saveUserProxemicsPreferenceToDatabase(int approachDirection, int
         else if (query.size() == 0) // if no previous entry of preference exist, create a new entry
             {
 
-            query.prepare("INSERT INTO Accompany.UserProxemicsPreferences (userId, robotGenericTaskId, proxemicsId)"
+            query.prepare("INSERT INTO UserProxemicsPreferences (userId, robotGenericTaskId, proxemicsId)"
                           " VALUES (:userId, :robotGenericTaskId, :proxemicsId)");
 
             query.bindValue(":userId", ui->userIdComboBox->currentText().section('.',0,0));
